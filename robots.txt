@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://daycare.dreamlabs.co.kr/sitemap.xml
