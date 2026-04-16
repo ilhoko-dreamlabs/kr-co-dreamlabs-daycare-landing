@@ -7,60 +7,49 @@ role_of_ai: vscodex working agent
 domain: daycare.dreamlabs.co.kr
 canonical_namespace: kr.co.dreamlabs.daycare.landing
 repo_slug: kr-co-dreamlabs-daycare-landing
+repo: ilhoko-dreamlabs/kr-co-dreamlabs-daycare-landing
 working_path: C:\dreamlabs\github\kr-co-dreamlabs-daycare-landing
 
 [CONFIRMED]
-- 어린이집명: 꿈초롱 어린이집
-- 주소: 서울 강서구 가양아파트 9단지 912동 106호
-- 유형: 가정어린이집
-- 정원: 13명
-- 최근 보수공사 완료 후 신규 원아 모집
-- 실제 내부 사진 반영
-- build 없는 정적 사이트 구조
-
-[VERIFICATION_REQUIRED]
-- 전화번호
-- 상담 가능 시간
-- 상담 채널
-- 모집 대상 연령
-- 운영시간 / 연장보육 여부
-- GitHub remote URL
-- DNS 관리 콘솔 권한(docker2)
-- DreamLabs Notion 표준 문서 접근 상태
+- 모집대상: 0~2세 영아 (영아 케어 전문)
+- 보육시간: 평일 07:30~19:30
+- 차량운행: 하지 않음
+- 특별활동: 없음
+- 보육료: 부모부담금 없음 (정부지원)
+- 원장: 김종예 (보육/교사 경력 20년)
+- 연락처: 010-6278-8456
+- 상담시간: 09:00~18:00
+- 카카오오픈대화: https://open.kakao.com/o/shlz2Aqi
 
 [DEPLOYMENT-BASELINE]
-- landing-only: GitHub 배포 + GitHub custom domain + docker2 DNS
-- app 배포: Vercel 배포 + Vercel custom domain + docker2 DNS
-- 본 프로젝트는 landing-only 기준을 사용한다.
+- landing-only: GitHub Pages + custom domain + docker2 DNS
+- custom_domain: daycare.dreamlabs.co.kr
+- dns_target: ilhoko-dreamlabs.github.io
 
 [TASK]
-다음 순서대로 작업한다.
-
-1. working_path 파일 구조를 점검한다.
-2. index.html / styles.css / app.js / images/* 정상 여부를 확인한다.
-3. 로컬 정적 서버로 프리뷰를 검증한다.
-4. 미확정 값은 placeholder 유지 상태로 보고한다.
-5. Git 저장소가 없으면 init 한다.
-6. 사용자가 remote URL을 제공한 경우에만 remote 연결/push를 수행한다.
-7. GitHub Pages custom domain 설정 여부를 확인한다.
-8. docker2 DNS 반영은 권한/접근이 있을 때만 수행하고, 없으면 required record만 보고한다.
-9. 최종 보고에서 `domain_added`, `dns_configured`, `domain_live`를 분리한다.
+1. 정적 페이지(index/styles/app) 운영 문구를 유지한다.
+2. 과거 임시 안내 문구가 재유입되지 않도록 점검한다.
+3. 이미지 경로와 CTA 링크 동작을 검증한다.
+4. Kakao key는 secret source에서 동기화하고 보고문에는 평문 노출하지 않는다.
+5. DNS/도메인 live는 별도 검증 상태로 보고한다.
 
 [REPORT_FORMAT]
-- local preview: success / failed
-- git init: success / skipped / failed
-- github remote: connected / missing / failed
-- push: success / skipped / failed
-- deployment_configured: yes / no
-- domain_added: yes / no
-- dns_configured: yes / no
-- domain_live: yes / no
-- dns required record: ...
-- blockers: ...
-- next action: ...
+- images_imported: yes/no
+- image_paths_validated: yes/no
+- kakao_secret_connected: yes/no
+- secret_exposed_in_report: no
+- remodeling_copy_removed: yes/no
+- confirmed_content_applied: yes/no
+- contact_cta_applied: yes/no
+- local_preview: success/fail
+- committed: yes/no
+- pushed: yes/no
+- commit_sha:
+- blockers:
+- verification_required:
 
 [IMPORTANT_RULES]
-- 미확정 사항을 확정처럼 쓰지 않는다.
-- domain add와 domain live를 혼동하지 않는다.
-- DNS 미반영 상태를 live로 표기하지 않는다.
-- destructive action은 명시 요청 없이 진행하지 않는다.
+- 미확인 사항은 확정처럼 쓰지 않는다.
+- secret 값 전체를 응답에 노출하지 않는다.
+- 문서 반영/로컬 프리뷰/원격 push/live 반영을 구분해서 보고한다.
+- destructive action은 명시 요청 없이 수행하지 않는다.
