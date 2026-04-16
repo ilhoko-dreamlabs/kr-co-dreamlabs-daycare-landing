@@ -77,18 +77,29 @@
 
   renderGallery();
 
-  const configKey =
-    window.__DAYCARE_SITE_CONFIG__ &&
-    window.__DAYCARE_SITE_CONFIG__.kakaoMapAppKey;
+  const siteConfig = window.__DAYCARE_SITE_CONFIG__ || {};
+  let configKey = "";
+  if (typeof siteConfig.kakaoMapAppKey === "string") {
+    configKey = siteConfig.kakaoMapAppKey.trim();
+  } else if (typeof siteConfig.getKakaoMapAppKey === "function") {
+    configKey = String(siteConfig.getKakaoMapAppKey() || "").trim();
+  } else if (Array.isArray(siteConfig.kakaoMapAppKeyBytes)) {
+    configKey = String.fromCharCode(...siteConfig.kakaoMapAppKeyBytes).trim();
+  }
   const legacyKey = window.__KAKAO_MAP_APP_KEY__;
   const kakaoMapAppKey = configKey || legacyKey || "";
 
-  const nurseryName = "꿈초롱 어린이집";
-  const nurseryAddressDisplay = "서울 강서구 가양아파트 9단지 912동";
+  const nurseryName = "꿈초롱어린이집 어린이집";
+  const nurseryAddressDisplay = "서울 강서구 허준로 234 912동 106호";
   const nurseryAddressCandidates = [
-    "서울 강서구 가양아파트 9단지 912동",
-    "서울 강서구 가양아파트 9단지 912동 106호",
-    "서울 강서구 가양아파트 9단지",
+    "서울 강서구 허준로 234 912동 106호",
+    "서울 강서구 허준로 234",
+    "강서구 허준로 234",
+  ];
+  const nurseryKeywordCandidates = [
+    "꿈초롱어린이집 어린이집 서울 강서구 허준로 234 912동 106호",
+    "꿈초롱어린이집 어린이집",
+    "서울 강서구 허준로 234 912동 106호",
   ];
   const mapTarget = document.getElementById("kakao-map");
 
@@ -109,11 +120,34 @@
 
     window.kakao.maps.load(() => {
       const geocoder = new window.kakao.maps.services.Geocoder();
+      const places = new window.kakao.maps.services.Places();
+
+      function renderMap(coords) {
+        const map = new window.kakao.maps.Map(mapTarget, {
+          center: coords,
+          level: 3,
+        });
+
+        const marker = new window.kakao.maps.Marker({
+          map,
+          position: coords,
+        });
+
+        const info = new window.kakao.maps.InfoWindow({
+          content: `
+              <div style="padding:10px 12px; font-size:13px; line-height:1.5; min-width:190px;">
+                <strong>${nurseryName}</strong><br />
+                ${nurseryAddressDisplay}
+              </div>
+            `,
+        });
+
+        info.open(map, marker);
+      }
 
       function searchAddress(index) {
         if (index >= nurseryAddressCandidates.length) {
-          mapTarget.innerHTML =
-            '<div style="padding:24px;color:#5f6b63;">주소 좌표를 찾지 못했습니다.</div>';
+          searchKeyword(0);
           return;
         }
 
@@ -128,31 +162,38 @@
             return;
           }
 
-          const coords = new window.kakao.maps.LatLng(
-            Number(result[0].y),
-            Number(result[0].x)
+          renderMap(
+            new window.kakao.maps.LatLng(
+              Number(result[0].y),
+              Number(result[0].x)
+            )
           );
+        });
+      }
 
-          const map = new window.kakao.maps.Map(mapTarget, {
-            center: coords,
-            level: 3,
-          });
+      function searchKeyword(index) {
+        if (index >= nurseryKeywordCandidates.length) {
+          mapTarget.innerHTML =
+            '<div style="padding:24px;color:#5f6b63;">주소 좌표를 찾지 못했습니다.</div>';
+          return;
+        }
 
-          const marker = new window.kakao.maps.Marker({
-            map,
-            position: coords,
-          });
+        places.keywordSearch(nurseryKeywordCandidates[index], (data, status) => {
+          if (
+            status !== window.kakao.maps.services.Status.OK ||
+            !data ||
+            !data.length
+          ) {
+            searchKeyword(index + 1);
+            return;
+          }
 
-          const info = new window.kakao.maps.InfoWindow({
-            content: `
-              <div style="padding:10px 12px; font-size:13px; line-height:1.5; min-width:190px;">
-                <strong>${nurseryName}</strong><br />
-                ${nurseryAddressDisplay}
-              </div>
-            `,
-          });
-
-          info.open(map, marker);
+          renderMap(
+            new window.kakao.maps.LatLng(
+              Number(data[0].y),
+              Number(data[0].x)
+            )
+          );
         });
       }
 

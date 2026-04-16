@@ -52,8 +52,20 @@ img { display: block; max-width: 100%; }
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 800;
   letter-spacing: -0.02em;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(215, 223, 212, 0.95);
+  box-shadow: 0 6px 14px rgba(35, 116, 78, 0.18);
 }
 
 .nav nav {
@@ -556,6 +568,7 @@ dialog#lightbox::backdrop {
   .container { width: min(calc(100% - 22px), var(--max)); }
   .nav { flex-direction: column; align-items: flex-start; }
   .nav nav { gap: 10px; font-size: 0.89rem; }
+  .brand-logo { width: 30px; height: 30px; }
   .hero { padding-top: 24px; }
   .btn { width: 100%; }
   .cta-row,

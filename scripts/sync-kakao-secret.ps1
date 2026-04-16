@@ -33,12 +33,18 @@ if ([string]::IsNullOrWhiteSpace($key)) {
   throw 'KAKAO_JAVASCRIPT_KEY is empty.'
 }
 
+$keyBytes = [System.Text.Encoding]::UTF8.GetBytes($key)
+$keyBytesLiteral = ($keyBytes | ForEach-Object { $_.ToString() }) -join ','
+
 $targetDir = Split-Path $OutputPath -Parent
 New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
 
 @"
 window.__DAYCARE_SITE_CONFIG__ = {
-  kakaoMapAppKey: '$key'
+  kakaoMapAppKeyBytes: [$keyBytesLiteral],
+  getKakaoMapAppKey: function () {
+    return String.fromCharCode.apply(null, this.kakaoMapAppKeyBytes || []);
+  }
 };
 "@ | Set-Content -Path $OutputPath -Encoding UTF8
 
