@@ -90,7 +90,8 @@
   const kakaoMapAppKey = configKey || legacyKey || "";
 
   const nurseryName = "꿈초롱어린이집 어린이집";
-  const nurseryAddressDisplay = "서울 강서구 허준로 234 912동 106호";
+  const nurseryAddressDisplay =
+    "서울 강서구 허준로 234 912동 106호 (가양 9단지 아파트)";
   const nurseryAddressCandidates = [
     "서울 강서구 허준로 234 912동 106호",
     "서울 강서구 허준로 234",
