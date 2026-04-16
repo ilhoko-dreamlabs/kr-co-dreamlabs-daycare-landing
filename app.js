@@ -89,17 +89,17 @@
   const legacyKey = window.__KAKAO_MAP_APP_KEY__;
   const kakaoMapAppKey = configKey || legacyKey || "";
 
-  const nurseryName = "꿈초롱어린이집 어린이집";
-  const nurseryAddressDisplay =
-    "서울 강서구 허준로 234 912동 106호 (가양 9단지 아파트)";
+  const nurseryName = "A 꿈초롱어린이집";
+  const nurseryAddressDisplay = "서울 강서구 허준로 234 912동 106호";
   const nurseryAddressCandidates = [
     "서울 강서구 허준로 234 912동 106호",
     "서울 강서구 허준로 234",
     "강서구 허준로 234",
   ];
   const nurseryKeywordCandidates = [
-    "꿈초롱어린이집 어린이집 서울 강서구 허준로 234 912동 106호",
-    "꿈초롱어린이집 어린이집",
+    "A 꿈초롱어린이집 서울 강서구 허준로 234 912동 106호",
+    "A 꿈초롱어린이집",
+    "꿈초롱어린이집",
     "서울 강서구 허준로 234 912동 106호",
   ];
   const mapTarget = document.getElementById("kakao-map");
