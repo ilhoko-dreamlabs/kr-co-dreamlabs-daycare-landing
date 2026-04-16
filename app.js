@@ -84,7 +84,7 @@
   const kakaoMapAppKey = configKey || legacyKey || "";
 
   const nurseryName = "꿈초롱 어린이집";
-  const nurseryAddress = "서울 강서구 가양아파트 9단지 912동 106호";
+  const nurseryAddress = "서울 강서구 가양아파트 9단지 912동";
   const mapTarget = document.getElementById("kakao-map");
 
   if (!mapTarget) return;
